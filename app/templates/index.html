@@ -5,5 +5,10 @@
 {% block header %} Home - Shift Logs {% endblock %}
 
 {% block content %}
-  Контент главной страницы
+  <div>
+    {% for log in logs %}
+      {{ log.author.username }} {{ log.pub_date }}:<br>
+      {{ log.text }}
+    {% endfor %}
+  </div>
 {% endblock %}

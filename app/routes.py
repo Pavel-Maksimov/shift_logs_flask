@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, url_for
 
 from app import app
 from app.forms import LoginForm
@@ -8,17 +8,14 @@ from app.forms import LoginForm
 @app.route('/index')
 def index():
     user = {'username': 'Павел'}
-    post = {
-        'text': 'test post',
+    log = {
+        'text': 'test log',
         'pub_date': '18.02.2022',
         'author': user,
-        'group': None,
-        'image': None
     }
     return render_template(
         'index.html',
-        path='home',
-        page=[post]
+        logs=[log]
     )
 
 
@@ -28,5 +25,5 @@ def login():
     if form.validate_on_submit():
         flash('Приветстуем, {}'.format(
             form.username.data))
-        return redirect('/index')
+        return redirect(url_for('index'))
     return render_template('login.html', title='Вход в систему', form=form)
