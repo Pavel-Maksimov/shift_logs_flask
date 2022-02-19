@@ -7,8 +7,8 @@
 {% block content %}
   <div>
     {% for log in logs %}
-      {{ log.author.username }} {{ log.pub_date }}:<br>
-      {{ log.text }}
+      {{ log.author.username }}       {{ log.timestamp }}:<br>
+      {{ log.body }}
     {% endfor %}
   </div>
 {% endblock %}
