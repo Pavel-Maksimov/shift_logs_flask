@@ -1,9 +1,11 @@
-from datetime import datetime
+from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_login import UserMixin
 
 from app import db, login
+from app.enums import ChoiceType, ShiftTime, Team, ValueEnum
+from app.choises import equipment, team_composition
 
 
 class User(UserMixin, db.Model):
@@ -28,12 +30,23 @@ class User(UserMixin, db.Model):
 
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.Text)
-    pub_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    pub_date = db.Column(db.Date, default=date.today)
+    shift_time = db.Column(
+        ValueEnum(ShiftTime)
+    )
+    team = db.Column(
+        ValueEnum(Team)
+    )
+    team_composition = db.Column(ChoiceType(team_composition))
+    equipment_run = db.Column(ChoiceType(equipment))
+    equipment_repair = db.Column(ChoiceType(equipment))
+    oper_notes = db.Column(db.Text)
+    defects = db.Column(db.Text)
+    is_active = db.Column(db.Boolean, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Log {}>'.format(self.body[:100])
+        return '<Log {}, {}>'.format(self.pub_date, self.shift_time)
 
 
 @login.user_loader
