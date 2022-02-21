@@ -7,8 +7,18 @@
 {% block content %}
   <div>
     {% for log in logs %}
-      {{ log.author.username }}       {{ log.timestamp }}:<br>
-      {{ log.body }}
+      <p>
+      <div>
+      {{ log.author.get_full_name() }}       {{ log.pub_date }}: {{ log.shift_time }}<br>
+      Смена: {{ log.team }}
+      {% if log.is_active %}
+        Сейчас на смене<br>
+      {% else %}
+        Смена сдана<br>
+      {% endif %}
+      <a href="{{ url_for('log', id=log.id) }}">Посмотреть</a></div><br>
+      </div>
+      </p>
     {% endfor %}
   </div>
 {% endblock %}

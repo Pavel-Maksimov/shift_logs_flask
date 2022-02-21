@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block header %} {{ title }} {% endblock %}
+
+{% block content %}
+  <div>
+    {% if (current_user == log.author) and log.is_active %}
+      {% include 'logform.html' with context %}
+    {% else %}
+      {% if log.is_active %} Сейчас на смене {% endif %}
+      <h1>Смена {{ log.team }}</h1>
+      <h1>{{ log.author.get_full_name() }}       {{ log.pub_date }}: {{ log.shift_time }}</h1>
+  
+      <p>
+        Состав смены:
+        {% for item in log.team_composition %}
+          {{ item }},
+          {% if loop.last %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+      </p>
+  
+      <p>
+        Оборудование в работе: 
+        {% for item in log.equipment_run %}
+          {{ item }},
+          {% if loop.last %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+      </p>
+  
+      <p>
+       Оборудование в ремонте:
+       {% for item in log.equipment_repair %}
+          {{ item }},
+          {% if loop.last %}
+            {{ item }}
+            {% endif %}
+        {% endfor %}
+      </p>
+  
+      <p>
+          Основная запись: {{ log.oper_notes|linebreaksbr }}
+      </p>
+  
+      <p>
+        Замечания и неполадки в работе оборудования: {{ log.defects|linebreaksbr }}
+      </p>
+    {% endif %}
+  </div>
+  {% if not log.is_active %}
+    <p>
+      {% if log.is_accepted %}
+        Смена принята
+      {% else %}
+        <a href="{{ url_for('accept_shift', id=log.id) }}">Принять смену</a></div><br>
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

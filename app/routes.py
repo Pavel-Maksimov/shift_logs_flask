@@ -2,8 +2,8 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from app import app
-from app.forms import LoginForm
+from app import app, db
+from app.forms import LogForm, LoginForm, RegistrationForm
 from app.models import Log, User
 
 
@@ -17,6 +17,54 @@ def index():
         title='Главная страница',
         logs=logs
     )
+
+
+@app.route('/log/<id>', methods=['GET', 'POST'])
+@login_required
+def log(id):
+    log = Log.query.filter_by(id=id).first_or_404()
+    form = LogForm(obj=log)
+    if request.method == 'POST' and form.validate_on_submit():
+        log.shift_time = form.shift_time.data
+        form.populate_obj(log)
+        db.session.commit()
+        flash('Изменения сохранены')
+        return redirect(url_for('log', id=log.id))
+    return render_template(
+        'log.html',
+        title='Сменный журнал',
+        log=log,
+        form=form
+    )
+
+
+@app.route('/pass_shift/<id>')
+@login_required
+def pass_shift(id):
+    log = Log.query.filter_by(id=id).first_or_404()
+    log.is_active = False
+    db.session.commit()
+    flash('Вы сдали смену')
+    return redirect(url_for('log', id=log.id))
+
+
+@app.route('/accept_shift/<id>')
+@login_required
+def accept_shift(id):
+    accepted = Log.query.filter_by(id=id).first()
+    accepted.is_accepted = True
+    db.session.add(accepted)
+    log = Log(
+        author=current_user,
+        equipment_run=accepted.equipment_run,
+        equipment_repair=accepted.equipment_repair,
+        oper_notes=accepted.oper_notes,
+        defects=accepted.defects
+    )
+    db.session.add(log)
+    db.session.commit()
+    flash('Вы приняли смену')
+    return redirect(url_for('log', id=log.id))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -41,3 +89,24 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(
+            username=form.username.data,
+            email=form.email.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            post=form.post.data
+        )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Вы зарегестрировались в системе!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Регистрация', form=form)

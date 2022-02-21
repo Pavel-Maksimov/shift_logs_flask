@@ -18,6 +18,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     logs = db.relationship('Log', backref='author', lazy='dynamic')
 
+    def get_full_name(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -43,6 +46,7 @@ class Log(db.Model):
     oper_notes = db.Column(db.Text)
     defects = db.Column(db.Text)
     is_active = db.Column(db.Boolean, default=True)
+    is_accepted = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):

@@ -1,6 +1,3 @@
-import enum
-from enum import Enum
-
 from app import db
 
 
@@ -16,7 +13,6 @@ class ValueEnum(db.TypeDecorator):
             return value
         elif isinstance(value, str):
             return value
-        return value.value
 
     def process_result_value(self, value, dialect):
         if isinstance(value, str):
@@ -33,7 +29,9 @@ class ChoiceType(db.TypeDecorator):
         super(ChoiceType, self).__init__(**kw)
 
     def process_bind_param(self, values, dialect):
-        return [k for k in self.choices if k in values]
+        if values:
+            return [k for k in self.choices if k in values]
+        return values
 
     def process_result_value(self, value, dialect):
         return value

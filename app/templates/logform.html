@@ -1,0 +1,31 @@
+<form action="" method="post">
+
+  {{ form.hidden_tag() }}
+
+  {% for field in form if field.name not in ("csrf_token", "oper_notes", "defects") %}
+    <p>{{ field.label() }}</p>
+    <p>
+      {{ field }}
+      {% for error in field.errors %}
+    	  {{ error }}
+      {% endfor %}
+    </p>
+  {% endfor %}
+  <p>{{ form.oper_notes.label() }}</p>
+  <p>
+    {{ form.oper_notes(rows=20, cols=70) }}
+    {% for error in form.oper_notes.errors %}
+  	  {{ error }}
+    {% endfor %}
+  </p>
+  <p>{{ form.defects.label() }}</p>
+  <p>
+    {{ form.defects(rows=5, cols=70) }}
+    {% for error in form.defects.errors %}
+  	  {{ error }}
+    {% endfor %}
+  </p>
+</form>
+<p>
+  <a href="{{ url_for('pass_shift', id=log.id) }}">Сдать смену</a></div><br>
+</p>
