@@ -1,5 +1,6 @@
 <form action="" method="post">
-
+ 
+ 
   {{ form.hidden_tag() }}
 
   {% for field in form if field.name not in ("csrf_token", "oper_notes", "defects") %}
@@ -18,8 +19,8 @@
   	  {{ error }}
     {% endfor %}
   </p>
-  <p>{{ form.defects.label() }}</p>
   <p>
+   <p>{{ form.defects.label() }}</p>
     {{ form.defects(rows=5, cols=70) }}
     {% for error in form.defects.errors %}
   	  {{ error }}
@@ -27,5 +28,5 @@
   </p>
 </form>
 <p>
-  <a href="{{ url_for('pass_shift', id=log.id) }}">Сдать смену</a></div><br>
+  <a href="{{ url_for('pass_shift', id=log.id) }}" class="btn btn-primary">Сдать смену</a></div><br>
 </p>

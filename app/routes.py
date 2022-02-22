@@ -11,11 +11,20 @@ from app.models import Log, User
 @app.route('/index')
 @login_required
 def index():
-    logs = Log.query.all()
+    page = request.args.get('page', 1, type=int)
+    logs = Log.query.order_by(Log.pub_date.desc()).paginate(
+        page,
+        app.config['POSTS_PER_PAGE'],
+        error_out=False
+    )
+    next_url = url_for('index', page=logs.next_num) if logs.has_next else None
+    prev_url = url_for('index', page=logs.prev_num) if logs.has_prev else None
     return render_template(
         'index.html',
         title='Главная страница',
-        logs=logs
+        logs=logs.items,
+        next_url=next_url,
+        prev_url=prev_url
     )
 
 

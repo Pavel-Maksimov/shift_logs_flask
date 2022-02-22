@@ -10,7 +10,12 @@ from app.choises import equipment, team_composition
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(60), index=True, unique=True, nullable=False)
+    username = db.Column(
+        db.String(60),
+        index=True,
+        unique=True,
+        nullable=False
+    )
     first_name = db.Column(db.String(60), nullable=False)
     last_name = db.Column(db.String(60), nullable=False)
     post = db.Column(db.String(200), nullable=False)
