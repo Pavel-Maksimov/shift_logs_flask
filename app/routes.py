@@ -12,7 +12,7 @@ from app.models import Log, User
 @login_required
 def index():
     page = request.args.get('page', 1, type=int)
-    logs = Log.query.order_by(Log.pub_date.desc()).paginate(
+    logs = Log.query.order_by(Log.id.desc()).paginate(
         page,
         app.config['POSTS_PER_PAGE'],
         error_out=False

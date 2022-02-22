@@ -36,13 +36,15 @@
           <h3 class="panel-title">Состав смены</h3>
         </div>
         <div class="panel-body">
-          {% for item in log.team_composition %}
-              {% if loop.last %}
-                  {{ item }}.
-              {% else %}
-                  {{ item }},
-              {% endif %}
-          {% endfor %}
+          {% if log.team_composition %}
+              {% for item in log.team_composition %}
+                  {% if loop.last %}
+                      {{ item }}.
+                  {% else %}
+                      {{ item }},
+                  {% endif %}
+              {% endfor %}
+          {% endif %}
         </div>
       </div> 
       
@@ -51,13 +53,16 @@
           <h3 class="panel-title">Оборудование в работе</h3>
         </div>
         <div class="panel-body">
-          {% for item in log.equipment_run %}
-              {% if loop.last %}
-                  {{ item }}.
-              {% else %}
-                  {{ item }},
+          {% if log.equipment_run %}
+            {% for item in log.equipment_run %}
+                {% if loop.last %}
+                    {{ item }}.
+                {% else %}
+                    {{ item }},
+                {% endif %}
+                {% endfor %}
           {% endif %}
-        {% endfor %}
+          
         </div>
       </div> 
   
@@ -66,13 +71,15 @@
           <h3 class="panel-title">Оборудование в ремонте</h3>
         </div>
         <div class="panel-body">
-          {% for item in log.equipment_repair %}
-              {% if loop.last %}
-                  {{ item }}.
-              {% else %}
-                  {{ item }},
+          {% if log.equipment_repair %}
+              {% for item in log.equipment_repair %}
+                  {% if loop.last %}
+                      {{ item }}.
+                  {% else %}
+                      {{ item }},
+              {% endif %}
+              {% endfor %}
           {% endif %}
-          {% endfor %}
         </div>
       </div>
   

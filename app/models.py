@@ -1,4 +1,5 @@
 from datetime import date
+from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_login import UserMixin
@@ -40,10 +41,12 @@ class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pub_date = db.Column(db.Date, default=date.today)
     shift_time = db.Column(
-        ValueEnum(ShiftTime)
+        ValueEnum(ShiftTime),
+        default='00:00-08:00'
     )
     team = db.Column(
-        ValueEnum(Team)
+        ValueEnum(Team),
+        default='А'
     )
     team_composition = db.Column(ChoiceType(team_composition))
     equipment_run = db.Column(ChoiceType(equipment))
