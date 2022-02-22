@@ -8,20 +8,28 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h2 class="panel-title">
-      {% if log.team %}
-        <h2>Смена {{ log.team }}</h2>
-      {% endif %} 
-      {% if log.shift_time %}
-        <h2>Время:  {{ log.shift_time }}</h2></h2>
-      {% endif %} 
+        {% if log.team %}
+            <h2>Смена {{ log.team }}</h2>
+        {% endif %} 
+        {% if log.shift_time %}
+            <h2>Время:  {{ log.shift_time }}</h2></h2>
+        {% endif %} 
   </div> 
   <div class="panel-body">
     {% if (current_user == log.author) and log.is_active %}
-      {% include 'logform.html' with context %}
+        {% include 'logform.html' with context %}
     {% else %}
-      {% if log.is_active %} Сейчас на смене {% endif %}
-      
-      <h4>Смену сдал: {{ log.author.get_full_name() }}</h4>
+        {% if current_user == log.author %}
+            Смена сдана
+        {% else %}
+            {% if log.is_active %}
+                Сейчас на смене
+                <h4>Смену принял: {{ log.author.get_full_name() }}</h4>
+            {% else %}
+                Смена сдана 
+                <h4>Смену сдал: {{ log.author.get_full_name() }}</h4>
+            {% endif %}
+        {% endif %}  
   
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -29,10 +37,11 @@
         </div>
         <div class="panel-body">
           {% for item in log.team_composition %}
-            {{ item }},
-            {% if loop.last %}
-              {{ item }}
-            {% endif %}
+              {% if loop.last %}
+                  {{ item }}.
+              {% else %}
+                  {{ item }},
+              {% endif %}
           {% endfor %}
         </div>
       </div> 
@@ -43,10 +52,11 @@
         </div>
         <div class="panel-body">
           {% for item in log.equipment_run %}
-            {{ item }},
-            {% if loop.last %}
-              {{ item }}
-            {% endif %}
+              {% if loop.last %}
+                  {{ item }}.
+              {% else %}
+                  {{ item }},
+          {% endif %}
         {% endfor %}
         </div>
       </div> 
@@ -57,10 +67,11 @@
         </div>
         <div class="panel-body">
           {% for item in log.equipment_repair %}
-            {{ item }},
-            {% if loop.last %}
-              {{ item }}
-            {% endif %}
+              {% if loop.last %}
+                  {{ item }}.
+              {% else %}
+                  {{ item }},
+          {% endif %}
           {% endfor %}
         </div>
       </div>

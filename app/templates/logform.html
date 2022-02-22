@@ -1,17 +1,48 @@
 <form action="" method="post">
  
- 
   {{ form.hidden_tag() }}
 
-  {% for field in form if field.name not in ("csrf_token", "oper_notes", "defects") %}
-    <p>{{ field.label() }}</p>
-    <p>
-      {{ field }}
-      {% for error in field.errors %}
-    	  {{ error }}
-      {% endfor %}
-    </p>
-  {% endfor %}
+  <p>{{ form.shift_time.label() }}</p>
+  <p>
+    {{ form.shift_time() }}
+    {% for error in form.shift_time.errors %}
+  	  {{ error }}
+    {% endfor %}
+  </p>
+
+  <p>{{ form.team.label() }}</p>
+  <p>
+    {{ form.team() }}
+    {% for error in form.team.errors %}
+  	  {{ error }}
+    {% endfor %}
+  </p>
+
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      {{ form.team_composition.label() }}
+      <span class="caret"></span>
+    </button>
+    {{ form.team_composition }}
+  </div>
+
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      {{ form.equipment_run.label() }}
+      <span class="caret"></span>
+    </button>
+    {{ form.equipment_run }}
+  </div>
+
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      {{ form.equipment_repair.label() }}
+      <span class="caret"></span>
+    </button>
+    {{ form.equipment_repair }}
+  </div>
+ 
+
   <p>{{ form.oper_notes.label() }}</p>
   <p>
     {{ form.oper_notes(rows=20, cols=70) }}
@@ -26,7 +57,8 @@
   	  {{ error }}
     {% endfor %}
   </p>
-</form>
+  <p>{{ form.submit() }}</p>
+</form><br><br>
 <p>
   <a href="{{ url_for('pass_shift', id=log.id) }}" class="btn btn-primary">Сдать смену</a></div><br>
 </p>

@@ -4,11 +4,12 @@ from wtforms import (
     StringField, SubmitField, TextAreaField
 )
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from wtforms.widgets import TableWidget, Select
+from wtforms.widgets import CheckboxInput
 
 from app.models import User
 from app.enums import ShiftTime, Team
 from app.choises import equipment, team_composition
+from app.custom_widgets import select_multi_checkbox
 
 
 class LoginForm(FlaskForm):
@@ -57,14 +58,17 @@ class LogForm(FlaskForm):
     team_composition = SelectMultipleField(
         'Состав смены',
         choices=[(i, i) for i in team_composition],
+        widget=select_multi_checkbox
     )
     equipment_run = SelectMultipleField(
         'Оборудование в работе',
         choices=[(i, i) for i in equipment],
+        widget=select_multi_checkbox
     )
     equipment_repair = SelectMultipleField(
         'Оборудование в ремонте',
-        choices=[(i, i) for i in equipment]
+        choices=[(i, i) for i in equipment],
+        widget=select_multi_checkbox
     )
     oper_notes = TextAreaField('Оперативные сменные записи')
     defects = TextAreaField('Замечания и неполадки в работе оборудования')
